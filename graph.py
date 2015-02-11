@@ -21,6 +21,7 @@ da_profits = 0
 
 
 def rollDice():
+    wager
     roll = random.randint(1,100)
 
     if roll == 100:
