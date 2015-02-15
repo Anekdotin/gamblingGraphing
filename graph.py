@@ -4,91 +4,33 @@ import matplotlib
 import matplotlib.pyplot as plt
 import time
 
+#lower_bust = 19.00
+#higher_profit = 69.00
 
-
-lower_bust = 31.235
-higher_profit = 63.208
-
-
-sampleSize = 100
-
-startingFunds = 10000
+# back to 1,000
+sampleSize = 1000
+startingFunds = 100000
 wagerSize = 100
-wagerCount = 1000
-da_profits = 0
+wagerCount = 100
+
 
 
 
 
 def rollDice():
-    wager
     roll = random.randint(1,100)
 
-    if roll == 100:
-        return Falseprint("we won, current value: " value)
-    elif roll <= 50:
+    if roll <= 50:
         return False
-    elif 100 > roll >= 50:
+    elif roll >= 51:
         return True
 
 
-def dAlembert(funds, initial_wager, wager_count):
-    global da_busts
-    global da_profits
 
-    value = funds
-    wager = initial_wager
-    currentWager = 1
-    previousWager = 'win'
-    previousWagerAmount = initial_wager
-
-    while currentWager <= wager_count:
-        if previousWager == 'win':
-            if wager == initial_wager:
-                pass
-            else:
-                wager -= initial_wager
-            print(currentWager, wager, value)
-            if rollDice():
-                value += wager
-                print("we won, current value: ", value)
-                previousWagerAmount = wager
-            else:
-                value -= wager
-                previousWager = 'loss'
-                print("we won, current value: ", value)
-                previousWagerAmount = wager
-            if value <= 0:
-                da_busts += 1
-                break
-
-            elif previousWager == 'loss':
-                wager = previousWagerAmount + initial_wager
-                if (value - wager) <= 0:
-                    wager = value
-                print('lost the last wager, current wager: ', wager, value)
-
-                if rollDice():
-                    value += wager
-                    previousWagerAmount = wager
-                    print('we wont current value', value)
-                    previousWager = 'win'
-
-                else:
-                    value -= wager
-                    previousWagerAmount = wager
-                    print('we ost current value', value)
-
-                    if value <= 0:
-                        da_busts += 1
-                        break
-                currentWager += 1
-
-            if value > funds:
-                da_profits += 1
-dAlembert(startingFunds, wagerSize, wagerCount)
-
-def doubler_bettor(funds, initial_wager, wager_count):
+def multiple_bettor2(funds,initial_wager,wager_count,multiple):#,color):
+    global ROI
+    global multiple_busts
+    global multiple_profits
 
     value = funds
     wager = initial_wager
@@ -110,71 +52,58 @@ def doubler_bettor(funds, initial_wager, wager_count):
                 previousWagerAmount = wager
                 wX.append(currentWager)
                 vY.append(value)
-                if value < 0:
-                    currentWager += 10000000000000000
+                if value <= 0:
+                    multiple_busts += 1
+                    break
         elif previousWager == 'loss':
             if rollDice():
-                wager = previousWagerAmount * 2
+                wager = previousWagerAmount * multiple
+                if (value - wager) <= 0:
+                    wager = value
+
                 value += wager
                 wager = initial_wager
                 previousWager = 'win'
                 wX.append(currentWager)
                 vY.append(value)
             else:
-                wager = previousWagerAmount * 2
+                wager = previousWagerAmount * multiple
+                if (value - wager) <= 0:
+                    wager = value
                 value -= wager
                 previousWager = 'loss'
                 previousWagerAmount = wager
                 wX.append(currentWager)
                 vY.append(value)
-                if value < 0:
-                    currentWager += 10000000000000000
+
+                if value <= 0:
+                    multiple_busts += 1
+                    break
+
 
         currentWager += 1
-    # this guy goes cyan #
-    plt.plot(wX,vY,'c')
+    #print 'ending Value:',value
+    ROI += value
+
+    #plt.plot(wX,vY)
+
+    if value > funds:
+        multiple_profits+=1
 
 
-def simple_bettor(funds,initial_wager,wager_count,color):
-    global broke_count
+multipleSampSize = 1000000
+multiple_busts = 0.0
+multiple_profits = 0.0
+ROI = 0
 
+counter = 1
+while counter <= multipleSampSize:
+    multiple_bettor2(startingFunds,wagerSize,wagerCount,1.75)
+    counter += 1
 
-    value = funds
-    wager = initial_wager
-    wX = []
-    vY = []
-    currentWager = 1
-    while currentWager <= wager_count:
-        if rollDice():
-            value += wager
-            wX.append(currentWager)
-            vY.append(value)
-        else:
-            value -= wager
-            wX.append(currentWager)
-            vY.append(value)
-
-            ###add me
-            if value < 0:
-                currentWager += 10000000000000000
-        currentWager += 1
-
-        if value < 0:
-            value = 'broke'
-            broke_count += 1
-    plt.plot(wX,vY,color)
-
-
-x = 0
-broke_count = 0
-
-while x < sampleSize:
-    simple_bettor(startingFunds,wagerSize,wagerCount,'k')
-    simple_bettor(startingFunds,wagerSize*2,wagerCount,'c')
-    #doubler_bettor(startingFunds,wagerSize,wagerCount)
-    x+=1
-
-plt.axhline(0, color = 'r')
-plt.ylabel('Account Value')
-plt.xlabel('Wager Count')
+print('Total Amount Invested:', multipleSampSize * startingFunds)
+print('Total Return:',ROI)
+print('Difference:',ROI-(multipleSampSize * startingFunds))
+print('Bust Rate:',(multiple_busts/multipleSampSize)*100.00)
+print('Profit Rate:',(multiple_profits/multipleSampSize)*100.00)
 plt.show()
