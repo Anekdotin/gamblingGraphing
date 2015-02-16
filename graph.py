@@ -1,19 +1,8 @@
 __author__ = 'ed'
 import random
-import matplotlib
-import matplotlib.pyplot as plt
-import time
-
-#lower_bust = 19.00
-#higher_profit = 69.00
-
-# back to 1,000
-sampleSize = 1000
-startingFunds = 100000
-wagerSize = 100
-wagerCount = 100
-
-
+#import matplotlib
+#import matplotlib.pyplot as plt
+#import time
 
 
 
@@ -91,19 +80,87 @@ def multiple_bettor2(funds,initial_wager,wager_count,multiple):#,color):
         multiple_profits+=1
 
 
-multipleSampSize = 1000000
-multiple_busts = 0.0
-multiple_profits = 0.0
-ROI = 0
 
-counter = 1
-while counter <= multipleSampSize:
-    multiple_bettor2(startingFunds,wagerSize,wagerCount,1.75)
-    counter += 1
 
-print('Total Amount Invested:', multipleSampSize * startingFunds)
-print('Total Return:',ROI)
-print('Difference:',ROI-(multipleSampSize * startingFunds))
-print('Bust Rate:',(multiple_busts/multipleSampSize)*100.00)
-print('Profit Rate:',(multiple_profits/multipleSampSize)*100.00)
-plt.show()
+#lower_bust = 19.00
+#higher_profit = 69.00
+
+
+sampleSize = 1000
+startingFunds = 100000
+
+while True:
+
+
+
+
+    #wagerSize = 100
+    #wagerCount = 100
+
+    wagerSize = random.uniform(1.0, 100.00)
+    wagerCount = random.uniform(10.0, 10000)
+    Ret = 0.0
+    da_profits = 0.0
+    da_busts = 0.0
+    daSampleSize = 10000
+
+
+
+
+
+    multipleSampSize = 1000000
+    multiple_busts = 0.0
+    multiple_profits = 0.0
+    ROI = 0
+
+    counter = 1
+
+
+    while counter <= daSampleSize:
+        multiple_bettor2(startingFunds,wagerSize,wagerCount,1.75)
+        counter += 1
+    ROI = Ret - (sampleSize*startingFunds)
+    totalInvested = daSampleSize*startingFunds
+
+    percentROI = (ROI/totalInvested)*100.00
+
+    wagerSizePercent = (wagerSize/startingFunds)*100.00
+
+
+
+    if percentROI > 1:
+
+        print('__________________________________________________')
+        print('Total Amount Invested:', daSampleSize * startingFunds)
+        print('Total Return:',ROI)
+        print('Difference:',ROI-(daSampleSize * startingFunds))
+        print('Percent ROI:', percentROI)
+        print('Bust Rate:',(multiple_busts/daSampleSize)*100.00)
+        print('Profit Rate:',(multiple_profits/daSampleSize)*100.00)
+        print('wager size:', wagerSize)
+        print('wager count: ', wagerCount)
+        print('wager size percent: ', wagerSizePercent)
+
+        saveFile = open('monteCarloliberal.csv', 'a')
+        saveLine = '\n' + str(percentROI) + ' , '+str(wagerSizePercent)+ ' , '+',g '
+        saveFile.write(saveLine)
+        saveFile.close()
+
+    elif percentROI > -1:
+
+        print('__________________________________________________')
+        print('Total Amount Invested:', daSampleSize * startingFunds)
+        print('Total Return:',ROI)
+        print('Difference:',ROI-(daSampleSize * startingFunds))
+        print('Percent ROI:', percentROI)
+        print('Bust Rate:',(multiple_busts/daSampleSize)*100.00)
+        print('Profit Rate:',(multiple_profits/daSampleSize)*100.00)
+        print('wager size:', wagerSize)
+        print('wager count: ', wagerCount)
+        print('wager size percent: ', wagerSizePercent)
+
+        saveFile = open('monteCarloliberal.csv', 'a')
+        saveLine = '\n' + str(percentROI) + ' , '+str(wagerSizePercent)+ ' , '+',g '
+        saveFile.write(saveLine)
+        saveFile.close()
+
