@@ -1,8 +1,37 @@
 __author__ = 'ed'
 import random
-#import matplotlib
-#import matplotlib.pyplot as plt
-#import time
+import matplotlib
+import matplotlib.pyplot as plt
+import csv
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+ax = fig.add_subplot(111,projection='3d')
+
+
+def graph():
+    with open('monteCarlo.csv','r') as montecarlo:
+        datas = csv.reader(montecarlo, delimiter=',')
+
+        for eachLine in datas:
+            percentROI = float(eachLine[0])
+            wagerSizePercent = float(eachLine[1])
+            wagerCount = float(eachLine[2])
+            pcolor = eachLine[3]
+
+            ax.scatter(wagerSizePercent,wagerCount,percentROI,color=pcolor)
+
+            ax.set_xlabel('wager percent size')
+            ax.set_ylabel('wager count')
+            ax.set_zlabel('Percent ROI')
+
+
+
+    plt.show()
+
+
+graph()
+
 
 
 
@@ -16,7 +45,7 @@ def rollDice():
 
 
 
-def multiple_bettor2(funds,initial_wager,wager_count,multiple):#,color):
+def multiple_bettor2(funds, initial_wager, wager_count, multiple):
     global ROI
     global multiple_busts
     global multiple_profits
@@ -109,9 +138,10 @@ while True:
 
 
     multipleSampSize = 1000000
-    multiple_busts = 0.0
-    multiple_profits = 0.0
-    ROI = 0
+    #multiple_busts = 0.0
+    #multiple_profits = 0.0
+    ROI = Ret - (daSampleSize+startingFunds)
+
 
     counter = 1
 
@@ -141,12 +171,12 @@ while True:
         print('wager count: ', wagerCount)
         print('wager size percent: ', wagerSizePercent)
 
-        saveFile = open('monteCarloliberal.csv', 'a')
-        saveLine = '\n' + str(percentROI) + ' , '+str(wagerSizePercent)+ ' , '+',g '
+        saveFile = open('monteCarlo.csv', 'a')
+        saveLine = '\n' + str(percentROI) + ','+str(wagerSizePercent)+','+',g '
         saveFile.write(saveLine)
         saveFile.close()
 
-    elif percentROI > -1:
+    elif percentROI < -1:
 
         print('__________________________________________________')
         print('Total Amount Invested:', daSampleSize * startingFunds)
@@ -159,8 +189,8 @@ while True:
         print('wager count: ', wagerCount)
         print('wager size percent: ', wagerSizePercent)
 
-        saveFile = open('monteCarloliberal.csv', 'a')
-        saveLine = '\n' + str(percentROI) + ' , '+str(wagerSizePercent)+ ' , '+',g '
+        saveFile = open('monteCarlo.csv', 'a')
+        saveLine = '\n' + str(percentROI) + ','+str(wagerSizePercent)+','+',g '
         saveFile.write(saveLine)
         saveFile.close()
 
